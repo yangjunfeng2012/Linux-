@@ -1,0 +1,147 @@
+linux 命令
+##############################################################
+sudo passwd root         #修改root密码
+shut dowm //sudo reboot  #关机
+
+apt-get install linux-source      #安装源码
+
+rm /etc/apt/sources.list.d/google-chrome.list.1  #rm删除文件
+
+
+sudo apt-cache search ssh server     #在软件库查找软件
+sudo apt-get update
+sudo apt-get upgrade          #升级软件库
+sudo apt-get install openssh-server  #安装ssh
+sudo apt-get install gcc g++         #安装ssh
+
+sudo apt-cache search generic
+sudo apt-cache search 4.18.0-15-generic
+sudo apt-get install linux-headers-4.18.0-15-generic
+
+sudo apt-get install make      
+sudo apt-get install make-guile
+
+
+sudo mount /dev/sr0 /media/
+mkdir temp
+cd temp/
+cp /media/VMwareTools-9.6.5-2700074.tar.gz .
+tar xvf VMwareTools-9.6.5-2700074.tar.gz 
+cd vmware-tools-distrib/
+sudo apt-get install open-vm-tools-desktop -y
+
+sudo vi /etc/ssh/sshd_config
+PermitRootLogin yes           #开启root权限
+
+sudo /etc/init.d/ssh restart  #重新启动ssh
+
+ #解压 #解压 #解压 #解压 #解压 #解压 #解压 #解压 #解压 #解压 #解压 #解压
+
+tar -xvf test2.tar       #解压
+
+sudo chmod +x cross.v300.install  #给file的属主增加执行权限
+sudo ./cross.v300.install
+//////////////////////////////////////////////////////////////
+arm-hisiv600-linux-gcc编译出现提示：No such file or directory
+实际就是：64位ubuntu不兼容32bit工具问题。
+解决办法如下：
+apt-get update
+sudo apt install lib32z1-dev
+
+make ARCH=arm CROSS_COMPILE=arm-hisiv400-linux- hi3536_config #配置
+
+sudo chmod 764 mkconfig
+
+make ARCH=arm CROSS_COMPILE=arm-hisiv400-linux-  #编译
+
+##出现arm-linux-gcc: command not found，如下解决
+##/bin/sh: 3: arm-hisiv400-linux-gcc: not found
+
+fd -lh
+
+sudo -s
+gedit /etc/profile
+export PATH="/opt/hisi-linux/x86-arm/arm-hisiv400-linux/target/bin:$PATH"
+source /etc/profile
+
+
+linux
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+ifconfig eth0 192.168.3.208 netmask 255.255.255.0
+
+ifconfig eth1 192.168.3.217 netmask 255.255.255.0
+
+
+route add default gw 192.168.3.1
+
+
+ifconfig lo up
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/zxq/ice_ipcsdk_linux_lib/lib
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lizi/ice_ipcs
+
+
+
+ifneq ($(KERNELRELEASE),)
+ 2     obj-m := mydev.o
+ 3 else
+ 4     KERNELDIR := /lib/modules/$(shell uname -r)/build
+ 5     PWD       := $(shell pwd)
+ 6 modules:
+ 7     $(MAKE) -C $(KERNELDIR) M=$(PWD) modules
+ 8     cp -a Module.symvers $(TOPDIR)/device
+ 9     mv *.ko $(TOPDIR)/modules/
+10 endif
+11 
+12 clean:
+13     rm -rf *.o *.symvers *.order *.ko *.mod.c *.markers .tmp_versions .*.cmd
+////////ubnutu开机进入命令行
+打开/etc/default/grub 这个文件
+在这个文件中找到下列一行内容：
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash" 
+把它改成： GRUB_CMDLINE_LINUX_DEFAULT="quiet splash text"
+文件修改后保存，最后执行：sudo update-grub
+
+
+dmesg tty_led_device.ko 
+
+linux下 使用cat /proc/devices 和 cd /dev ls-l 查看设备号
+
+insmod demo.ko
+lsmod   demo.ko
+rmmod demo.ko
+cat /proc/devices
+那么要看设备号需要使用如下命令：
+cat   /proc/misc
+
+mknod tty_led_device c 88 0
+cat /var/log/syslog | grep world
+
+
+
+
+linux route命令详解
+ps -aux
+
+kill aill -9 tty_uart3
+kill -9 tty_uart3
+
+
+PC上的串口一般是ttyS，板子上Linux的串口一般叫做ttySAC，是usb口转串口的是ttyUSB
+外插串口卡的话默认是
+
+dev下的ttyS* ,一般ttyS0对应com1，ttyS1对应com2
+
+
+
+
+cd  /proc/tty/driver
+cat /proc/tty/drivers
+cat /proc/tty/driver/serial   ##查看串口的驱动信息
+
+dmesg | grep ttyS*            ##查看串口设备
+stty -a -F /dev/ttyS0         ##查看串口的波特率
+ls -l /dev/tty*               ##查看串口的权限信息和名称
+
+
