@@ -1,0 +1,69 @@
+最近我在实现将本地avi视频推送到RTMP服务器进行显示，搭建一个rtmp代理服务器就必不可少。简单基本概念介绍：
+
+RTMP全称是Real Time Messaging Protocol（实时消息传输协议），rmtp是一种通讯协议。该协议基于TCP，是一个协议族，包括RTMP基本协议及RTMPT/RTMPS/RTMPE等多种变种。RTMP是一种设计用来进行实时数据通信的网络协议，主要用来在Flash/AIR平台和支持RTMP协议的流媒体/交互服务器之间进行音视频和数据通信。现在更流行于直播平台服务器的推流处理！
+
+ nginx-rtmp 是一个基于nginx的 RTMP服务模块,开源，免费。
+
+参考：https://blog.csdn.net/liukang325/article/details/53262133
+
+下面是我搭建的全过程，亲测：
+
+1、 安装编译 nginx 所需要的库
+
+ sudo apt-get install build-essential 
+ sudo apt-get install libpcre3 
+ sudo apt-get install libpcre3-dev
+ sudo apt-get install libssl-dev
+安装可能会出现：
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+参考链接：https://blog.csdn.net/qq_39759656/article/details/80310278
+
+2、 下载 nginx-1.9.15.tar.gz
+
+wget http://nginx.org/download/nginx-1.9.15.tar.gz
+3、 下载 nginx-rtmp-module
+
+wget https://github.com/arut/nginx-rtmp-module/archive/master.zip
+4、解压
+
+tar -zxvf nginx-1.9.15.tar.gz
+unzip master.zip
+cd nginx-1.9.15
+5、编译
+
+./configure --with-http_ssl_module --add-module=../nginx-rtmp-module-master
+make
+sudo make install
+6、启动nginx，检测nginx是否能成功运行
+
+ sudo /usr/local/nginx/sbin/nginx
+7、配置nginx使用RTMP, /usr/local/nginx/conf/nginx.conf 
+
+在末尾添加如下信息，默认监听1935端口
+
+rtmp {
+        server {
+                listen 1935;
+                chunk_size 4096;
+//创建一个发布应用 live ,发布到该应用的地址就是：rtmp://ip地址:1935/live/ 
+                application live {
+                        live on;
+                        record off;
+                }
+        }
+}
+8、重启nginx服务器
+
+sudo /usr/local/nginx/sbin/nginx -s stop
+sudo /usr/local/nginx/sbin/nginx
+9、测试
+
+Network Stream URL: rtmp://%your_server_ip%/live/test
+例如：rtmp://192.168.18.116/live/test
+或者
+
+Linux每个应用运行都会产生一个进程，那么我们就可以通过查看Nginx进程是否存在来判断它是否启动。
+
+用ps -ef列出进程列表，然后通过grep过滤。
+
+如： ps -ef | grep nginx 就可以看到Nginx进程是否存在了
